@@ -1,4 +1,31 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿"use strict";
 
-// Write your JavaScript code.
+var connection = new signalR.HubConnectionBuilder()
+    .withUrl("/likeposthub")
+    .build();
+
+connection.start()
+    .then(function () { })
+    .catch(function (err) {
+        return console.log(err.toString());
+    });
+
+$(".like-button").on("click", function () {
+    var postId = $(this).attr("data-id");
+    sendPostLike(postId);
+});
+
+function sendPostLike(postId) {
+    connection.invoke("SendPostLike", postId).catch(function (err) {
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+}
+
+connection.on("UpdateLikes", function (likes) {
+    var counter = $(".like-count");
+    $(counter).fadeOut(function () {
+        $(this).text(likes);
+        $(this).fadeIn();
+    });
+});

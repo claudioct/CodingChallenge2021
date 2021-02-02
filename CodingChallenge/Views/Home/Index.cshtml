@@ -7,3 +7,9 @@
     <h1 class="display-4">@Model.Title</h1>
     @Html.Raw(@Model.Content);
 </div>
+
+<button data-id="@Model.Id" type="button" class="like-button" title="Click to like this post!">
+    👍 Like
+    |
+    <span class="like-count">@Model.Likes</span>
+</button>
